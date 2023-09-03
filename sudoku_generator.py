@@ -1,5 +1,5 @@
 import random
-import sudoku_solver as sSolver
+from sudoku_solver import SudokuSolver
 
 def generate_sudoku(difficulty):
     grid = [[0 for _ in range(9)] for _ in range(9)]
@@ -26,7 +26,7 @@ def generate_sudoku(difficulty):
         backup = grid[row][col]
         grid[row][col] = 0
 
-        if sSolver.SudokuSolver().has_unique_solution(grid):
+        if SudokuSolver(grid).has_unique_solution():
             empty_squares -= 1
         else:
             grid[row][col] = backup  # put the last cell value back
