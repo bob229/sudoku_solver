@@ -26,12 +26,11 @@ def generate_sudoku(difficulty):
         backup = grid[row][col]
         grid[row][col] = 0
 
-        if sSolver.SudokuSolver().unique_solution(grid):
+        if sSolver.SudokuSolver().has_unique_solution(grid):
             empty_squares -= 1
         else:
             grid[row][col] = backup  # put the last cell value back
     
-    print(81 - difficulty + empty_squares)
     return grid
 
 def __is_valid(grid, row, col, num):
@@ -78,7 +77,6 @@ def __shuffle_numbers():
     random.shuffle(numbers)
     return numbers
 
-# fill the diagonal 3x3 box
 def __fill_diagonal(grid):
     for box_corner in range(0, 9, 3):
         # fill 3x3 box
@@ -87,11 +85,14 @@ def __fill_diagonal(grid):
             for j in range(3):
                 grid[box_corner + i][box_corner + j] = val.pop()
 
-
 def print_sudoku(grid):
     for i in range(9):
         for j in range(9):
-            print(grid[i][j], end=' ')
+            num = grid[i][j]
+            if num == 0:
+                print('.', end=' ')
+            else:
+                print(num, end=' ')
         print()
 
 def calculate_prevalence(grids):
@@ -110,11 +111,19 @@ def calculate_prevalence(grids):
 
     return prevalence_chart
 
-
 if __name__ == '__main__':
-    # print_sudoku(generate_sudoku(0))  # The number represents the number of squares that will be emptied. 
-    x = []
-    for i in range(100000):
-        x.append(generate_sudoku(40))
+    input_difficulty = input("Enter difficulty level (0 - 100): ")
+
+    try:
+        int_difficulty = int(input_difficulty)
+    except ValueError:
+        print("Invalid input! Please enter a valid integer between 0 and 100.")
     
-    print(calculate_prevalence(x))
+    if int_difficulty is not None:
+        if 0 <= int_difficulty <= 100:
+            empty_squares = round(64 * int_difficulty / 100)
+            print_sudoku(generate_sudoku(empty_squares))
+        else:
+            print("Invalid input! Please enter a valid integer between 0 and 100.")
+    else:
+        print("Invalid input! Please enter a valid integer between 0 and 100.")
